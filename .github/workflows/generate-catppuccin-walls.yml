@@ -19,27 +19,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "stable"
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Install gowall
-        run: go install github.com/Achno/gowall@latest
+      - name: Install lutgen
+        run: cargo install lutgen-cli
 
       - name: Generate Catppuccin wallpapers
         env:
-          UPSCALE_SCALE: "2"
-          UPSCALE_MODEL: "realesrgan-x4plus"
-          UPSCALE_STRICT: "false"
+          PALETTE: "catppuccin-mocha"
         run: |
-          export PATH="$PATH:$HOME/go/bin"
+          export PATH="$PATH:$HOME/.cargo/bin"
           bash ./scripts/generate-catppuccin.sh
 
       - name: Commit and push updates
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "Adarsh"
+          git config user.email "83777943+adarsh-67r@users.noreply.github.com"
           if [[ -d catppuccin-walls ]]; then
             shopt -s nullglob
             files=(catppuccin-walls/*.png catppuccin-walls/*.jpg catppuccin-walls/*.jpeg catppuccin-walls/*.webp)
